@@ -175,14 +175,8 @@ namespace S3
             {
                 if (Globals.settings.tintEnabled)
                 {
-                    foreach (string file in Directory.GetFiles(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Content/html/img")))
-                    {
-                        using (MagickImage image = new MagickImage(file))
-                        {
-                            image.Colorize(new MagickColor(Globals.settings.tintColor), new Percentage(100));
-                            image.Write(file);
-                        }
-                    }
+                    TintFolder("Content/html/img");
+                    TintFolder("Content/html/img/pregame");
                 }
                 isServerUp = true;
                 try
@@ -207,6 +201,21 @@ namespace S3
         private void UrlLinkLabel_Click(object sender, EventArgs e)
         {
             Process.Start(UrlLinkLabel.Text);
+        }
+
+        private void TintFolder(string relativePath)
+        {
+            if (Globals.settings.tintEnabled)
+            {
+                foreach (string file in Directory.GetFiles(Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), relativePath)))
+                {
+                    using (MagickImage image = new MagickImage(file))
+                    {
+                        image.Colorize(new MagickColor(Globals.settings.tintColor), new Percentage(100));
+                        image.Write(file);
+                    }
+                }
+            }
         }
     }
 }
